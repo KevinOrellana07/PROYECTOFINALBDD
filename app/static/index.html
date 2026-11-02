@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoAudit</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f8b8d'/%3E%3Cpath d='M9 17l4 4 10-10' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<!-- ======================= LOGIN ======================= -->
+<section id="login" class="oculto">
+  <form class="login-caja" id="form-login" autocomplete="on">
+    <div class="marca">
+      <svg width="34" height="34" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#0f8b8d"/><path d="M9 17l4 4 10-10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+      AutoAudit
+    </div>
+    <h1>Sistema de auditoría automatizado</h1>
+    <p>Ingrese con su usuario de PostgreSQL.</p>
+    <div class="campo"><label for="l-usuario">Usuario</label><input type="text" id="l-usuario" required autofocus></div>
+    <div class="campo"><label for="l-clave">Contraseña</label><input type="password" id="l-clave" required></div>
+    <div id="login-error" class="aviso error oculto"></div>
+    <button class="btn primario bloque" type="submit">Ingresar</button>
+    <div class="demo-usuarios">
+      Usuarios de demostración:<br>
+      <button type="button" data-u="admin_auditoria" data-c="Admin123!">admin_auditoria</button>
+      <button type="button" data-u="auditor" data-c="Auditor123!">auditor</button>
+      <button type="button" data-u="vendedor" data-c="Vendedor123!">vendedor</button>
+      <button type="button" data-u="bodeguero" data-c="Bodega123!">bodeguero</button>
+    </div>
+  </form>
+</section>
+
+<!-- ======================= APLICACIÓN ======================= -->
+<div id="app" class="oculto">
+  <aside>
+    <div class="marca">
+      <svg width="28" height="28" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#0f8b8d"/><path d="M9 17l4 4 10-10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+      AutoAudit
+    </div>
+    <nav id="menu">
+      <div class="grupo">Auditoría</div>
+      <a href="#panel" data-r="consulta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Panel</a>
+      <a href="#configuracion" data-r="consulta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Configuración</a>
+      <a href="#bitacora" data-r="consulta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></svg>Bitácora</a>
+      <div class="grupo">Consultas</div>
+      <a href="#usuarios" data-r="consulta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Por usuario</a>
+      <a href="#columnas" data-r="consulta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18"/></svg>Por columna</a>
+      <div class="grupo">Sistema</div>
+      <a href="#datos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>Datos (simulador)</a>
+      <a href="#generador" data-r="consulta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>Registro del generador</a>
+      <a href="#parametros" data-r="consulta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Parámetros</a>
+    </nav>
+    <div class="usuario-caja">
+      <b id="u-nombre"></b>
+      <span class="rol" id="u-rol"></span>
+      <div><button id="btn-salir">Cerrar sesión</button></div>
+    </div>
+  </aside>
+  <main id="vista"></main>
+</div>
+
+<div id="modal-raiz"></div>
+<div id="toasts"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

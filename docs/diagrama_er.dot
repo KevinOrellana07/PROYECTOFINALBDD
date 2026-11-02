@@ -1,0 +1,117 @@
+// AutoAudit - Diagrama entidad-relación (Graphviz)
+// Generar imagen:  dot -Tpng docs/diagrama_er.dot -o docs/diagrama_er.png
+digraph AutoAudit {
+  graph [rankdir=LR, splines=spline, nodesep=0.55, ranksep=1.1, fontname="Helvetica", bgcolor="white", pad=0.3];
+  node  [shape=plain, fontname="Helvetica", fontsize=10];
+  edge  [fontsize=9, fontcolor="#4b5d73", arrowhead=crow, arrowtail=tee, dir=both, color="#4b5d73", penwidth=1.1];
+
+  tabla_auditada [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#9aa8b8">
+    <tr><td bgcolor="#1F3A5F" colspan="2"><font color="white"><b>TABLA_AUDITADA</b></font></td></tr>
+    <tr><td align="left"><b>PK</b></td><td align="left">tabla_id</td></tr>
+    <tr><td align="left">UQ</td><td align="left">tabla_oid</td></tr>
+    <tr><td></td><td align="left">esquema, tabla</td></tr>
+    <tr><td></td><td align="left">descripcion</td></tr>
+    <tr><td></td><td align="left">activa, estado</td></tr>
+    <tr><td></td><td align="left">funcion_trigger, trigger_nombre</td></tr>
+    <tr><td></td><td align="left">sql_generado, fecha_generacion</td></tr>
+    <tr><td></td><td align="left">ultimo_error, creado_por, ...</td></tr>
+  </table>>];
+
+  columna_auditada [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#9aa8b8">
+    <tr><td bgcolor="#1F3A5F" colspan="2"><font color="white"><b>COLUMNA_AUDITADA</b></font></td></tr>
+    <tr><td align="left"><b>PK</b></td><td align="left">columna_id</td></tr>
+    <tr><td align="left">FK</td><td align="left">tabla_id</td></tr>
+    <tr><td></td><td align="left">columna, attnum</td></tr>
+    <tr><td></td><td align="left">tipo_dato</td></tr>
+    <tr><td></td><td align="left">activa, eliminada</td></tr>
+  </table>>];
+
+  evento [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#9aa8b8">
+    <tr><td bgcolor="#1F3A5F" colspan="2"><font color="white"><b>EVENTO</b></font></td></tr>
+    <tr><td align="left"><b>PK</b></td><td align="left">evento_id</td></tr>
+    <tr><td align="left">UQ</td><td align="left">codigo (INSERT/UPDATE/DELETE)</td></tr>
+    <tr><td></td><td align="left">descripcion</td></tr>
+  </table>>];
+
+  configuracion_auditoria [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#9aa8b8">
+    <tr><td bgcolor="#0f8b8d" colspan="2"><font color="white"><b>CONFIGURACION_AUDITORIA</b></font></td></tr>
+    <tr><td align="left"><b>PK</b></td><td align="left">configuracion_id</td></tr>
+    <tr><td align="left">FK</td><td align="left">columna_id</td></tr>
+    <tr><td align="left">FK</td><td align="left">evento_id</td></tr>
+    <tr><td></td><td align="left">activo</td></tr>
+    <tr><td></td><td align="left">fecha_creacion, fecha_modificacion</td></tr>
+  </table>>];
+
+  usuario_auditado [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#9aa8b8">
+    <tr><td bgcolor="#1F3A5F" colspan="2"><font color="white"><b>USUARIO_AUDITADO</b></font></td></tr>
+    <tr><td align="left"><b>PK</b></td><td align="left">usuario_id</td></tr>
+    <tr><td align="left">UQ</td><td align="left">nombre_usuario</td></tr>
+    <tr><td></td><td align="left">primera_actividad</td></tr>
+  </table>>];
+
+  estacion_trabajo [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#9aa8b8">
+    <tr><td bgcolor="#1F3A5F" colspan="2"><font color="white"><b>ESTACION_TRABAJO</b></font></td></tr>
+    <tr><td align="left"><b>PK</b></td><td align="left">estacion_id</td></tr>
+    <tr><td align="left">UQ</td><td align="left">direccion_ip, equipo, aplicacion</td></tr>
+    <tr><td></td><td align="left">primera_actividad</td></tr>
+  </table>>];
+
+  bitacora_encabezado [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#9aa8b8">
+    <tr><td bgcolor="#a8432b" colspan="2"><font color="white"><b>BITACORA_ENCABEZADO</b></font></td></tr>
+    <tr><td align="left"><b>PK</b></td><td align="left">encabezado_id</td></tr>
+    <tr><td align="left">FK</td><td align="left">tabla_id</td></tr>
+    <tr><td align="left">FK</td><td align="left">evento_id</td></tr>
+    <tr><td align="left">FK</td><td align="left">usuario_id</td></tr>
+    <tr><td align="left">FK</td><td align="left">estacion_id</td></tr>
+    <tr><td></td><td align="left">fecha_hora, transaccion_id</td></tr>
+    <tr><td></td><td align="left">usuario_aplicacion</td></tr>
+    <tr><td></td><td align="left">llave_registro (jsonb)</td></tr>
+    <tr><td></td><td align="left">datos_anteriores, datos_nuevos (jsonb)</td></tr>
+  </table>>];
+
+  bitacora_detalle [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#9aa8b8">
+    <tr><td bgcolor="#a8432b" colspan="2"><font color="white"><b>BITACORA_DETALLE</b></font></td></tr>
+    <tr><td align="left"><b>PK</b></td><td align="left">detalle_id</td></tr>
+    <tr><td align="left">FK</td><td align="left">encabezado_id</td></tr>
+    <tr><td align="left">FK</td><td align="left">configuracion_id</td></tr>
+    <tr><td align="left">FK</td><td align="left">columna_id</td></tr>
+    <tr><td></td><td align="left">valor_anterior</td></tr>
+    <tr><td></td><td align="left">valor_nuevo</td></tr>
+  </table>>];
+
+  log_generacion [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#9aa8b8">
+    <tr><td bgcolor="#5d6b7e" colspan="2"><font color="white"><b>LOG_GENERACION</b></font></td></tr>
+    <tr><td align="left"><b>PK</b></td><td align="left">log_id</td></tr>
+    <tr><td align="left">FK</td><td align="left">tabla_id</td></tr>
+    <tr><td></td><td align="left">accion, exito, mensaje</td></tr>
+    <tr><td></td><td align="left">sql_ejecutado, usuario</td></tr>
+  </table>>];
+
+  parametro [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#9aa8b8">
+    <tr><td bgcolor="#5d6b7e" colspan="2"><font color="white"><b>PARAMETRO</b></font></td></tr>
+    <tr><td align="left"><b>PK</b></td><td align="left">clave</td></tr>
+    <tr><td></td><td align="left">valor, descripcion</td></tr>
+  </table>>];
+
+  tabla_auditada   -> columna_auditada        [label="1:N"];
+  columna_auditada -> configuracion_auditoria [label="1:N"];
+  evento           -> configuracion_auditoria [label="1:N"];
+  tabla_auditada   -> bitacora_encabezado     [label="1:N"];
+  evento           -> bitacora_encabezado     [label="1:N"];
+  usuario_auditado -> bitacora_encabezado     [label="1:N"];
+  estacion_trabajo -> bitacora_encabezado     [label="1:N"];
+  bitacora_encabezado     -> bitacora_detalle [label="1:N"];
+  configuracion_auditoria -> bitacora_detalle [label="1:N"];
+  columna_auditada        -> bitacora_detalle [label="1:N"];
+  tabla_auditada   -> log_generacion          [label="1:N", style=dashed];
+}
